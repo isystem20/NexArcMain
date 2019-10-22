@@ -1,0 +1,607 @@
+<div class="main-container">
+    <div class="module-title">Generate Payroll</div>
+    <div class="listing">
+        <div class="listing-header">
+            <div class="listing-btn-grp">
+                <button type="button" class="btn btn-sm btn-warning">
+                    <i class="si si-lock"></i>
+                    Lock
+                </button>
+                <button type="button" class="btn btn-sm btn-secondary">
+                    <i class="si si-lock-open"></i>
+                    Unlock
+                </button>
+            </div>
+            <div class="listing-btn-grp">
+                <button type="button" class="btn btn-sm btn-primary">
+                    <i class="si si-plus"></i>
+                    New
+                </button>
+                <button type="button" class="btn btn-sm btn-info">
+                    <i class="si si-pencil"></i>
+                    Edit
+                </button>
+                <button type="button" class="btn btn-sm btn-danger">
+                    <i class="si si-trash"></i>
+                    Delete
+                </button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="tbl-holder table table-bordered table-striped table-vcenter js-dataTable-full-pagination">
+                <thead>
+                    <tr>
+                        <th class="text-center" style="width: 50px;">
+                            <div class="custom-control custom-checkbox d-inline-block">
+                                <input type="checkbox" class="custom-control-input" id="check-all" name="check-all">
+                                <label class="custom-control-label" for="check-all"></label>
+                            </div>
+                        </th>
+                        <th class="text-left">Ref #</th>
+                        <th>Year </th>
+                        <th>Month</th>
+                        <th>Period </th>
+                        <th>Payout </th>
+                        <th>Pay Group</th>
+                        <th class="d-none d-sm-table-cell">Remarks</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr>
+                                <td class="text-center">
+                                    <div class="custom-control custom-checkbox d-inline-block">
+                                        <input type="checkbox" class="custom-control-input" id="1" name="wizard-simple-terms">
+                                        <label class="custom-control-label" for="1"></label>
+                                    </div>
+                                </td>
+                                <td >
+                                    <a [routerLink]="['/payroll/generate-payroll/', 2]">
+                                    PAY-00001
+                                    </a>
+                                </td>
+                                <td class="font-w600 font-size-sm">
+                                    2019
+                                </td>
+                                <td class="d-none d-sm-table-cell font-size-sm">January
+                                </td>
+                                <td class="d-none d-sm-table-cell">
+                                    1st Period
+                                </td>
+                                <td class="d-none d-sm-table-cell">
+                                    01/15/2019
+                                </td>
+                                <td>Managers (Confidential)</td>
+                                <td class="font-size-sm">This regular payroll is only for managers</td>
+                                <td>
+                                    <em class="text-center text-muted font-size-sm">Locked</em>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">
+                                    <div class="custom-control custom-checkbox d-inline-block">
+                                        <input type="checkbox" class="custom-control-input" id="2" name="wizard-simple-terms">
+                                        <label class="custom-control-label" for="2"></label>
+                                    </div>
+                                </td>
+                                <td >
+                                    <a [routerLink]="['/payroll/generate-payroll/', 2]">
+                                        PAY-00002
+                                    </a>
+                                </td>
+                                <td class="font-w600 font-size-sm">
+                                    2019
+                                </td>
+                                <td class="d-none d-sm-table-cell font-size-sm">January
+                                </td>
+                                <td class="d-none d-sm-table-cell">
+                                    1st Period
+                                </td>
+                                <td class="d-none d-sm-table-cell">
+                                    01/15/2019
+                                </td>
+                                <td>Rank and File (Non - Confidential)</td>
+                                <td class="font-size-sm"></td>
+                                <td>
+                                    <em class="text-center text-muted font-size-sm">Locked</em>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">
+                                    <div class="custom-control custom-checkbox d-inline-block">
+                                        <input type="checkbox" class="custom-control-input" id="4" name="wizard-simple-terms">
+                                        <label class="custom-control-label" for="4"></label>
+                                    </div>
+                                </td>
+                                <td ><a href='/payroll/pay_process/2'>PAY-00003</a></td>
+                                <td class="font-w600 font-size-sm">
+                                    2019
+                                </td>
+                                <td class="d-none d-sm-table-cell font-size-sm">January
+                                </td>
+                                <td class="d-none d-sm-table-cell">
+                                    2nd Period
+                                </td>
+                                <td class="d-none d-sm-table-cell">
+                                    01/31/2019
+                                </td>
+                                <td>Managers (Confidential)</td>
+                                <td class="font-size-sm">This payroll is only for managers</td>
+                                <td>
+                                    <em class="text-center text-muted font-size-sm">Locked</em>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">
+                                    <div class="custom-control custom-checkbox d-inline-block">
+                                        <input type="checkbox" class="custom-control-input" id="5" name="wizard-simple-terms">
+                                        <label class="custom-control-label" for="5"></label>
+                                    </div>
+                                </td>
+                                <td ><a [routerLink]="['/payroll/generate-payroll/', 2]">PAY-00004</a></td>
+                                <td class="font-w600 font-size-sm">
+                                    2019
+                                </td>
+                                <td class="d-none d-sm-table-cell font-size-sm">January
+                                </td>
+                                <td class="d-none d-sm-table-cell">
+                                    2nd Period
+                                </td>
+                                <td class="d-none d-sm-table-cell">
+                                    01/31/2019
+                                </td>
+                                <td>Rank and File (Non - Confidential)</td>
+                                <td class="font-size-sm"></td>
+                                <td>
+                                    <em class="text-center text-muted font-size-sm">Locked</em>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">
+                                    <div class="custom-control custom-checkbox d-inline-block">
+                                        <input type="checkbox" class="custom-control-input" id="6" name="wizard-simple-terms">
+                                        <label class="custom-control-label" for="6"></label>
+                                    </div>
+                                </td>
+                                <td ><a [routerLink]="['/payroll/generate-payroll/', 2]">PAY-00005</a></td>
+                                <td class="font-w600 font-size-sm">
+                                    2019
+                                </td>
+                                <td class="d-none d-sm-table-cell font-size-sm">February
+                                </td>
+                                <td class="d-none d-sm-table-cell">
+                                    1st Period
+                                </td>
+                                <td class="d-none d-sm-table-cell">
+                                    02/15/2019
+                                </td>
+                                <td>Managers (Confidential)</td>
+                                <td class="font-size-sm">This regular payroll is only for managers</td>
+                                <td>
+                                    <em class="text-center text-muted font-size-sm">Locked</em>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">
+                                    <div class="custom-control custom-checkbox d-inline-block">
+                                        <input type="checkbox" class="custom-control-input" id="7" name="wizard-simple-terms">
+                                        <label class="custom-control-label" for="7"></label>
+                                    </div>
+                                </td>
+                                <td ><a [routerLink]="['/payroll/generate-payroll/', 2]">PAY-00006</a></td>
+                                <td class="font-w600 font-size-sm">
+                                    2019
+                                </td>
+                                <td class="d-none d-sm-table-cell font-size-sm">February
+                                </td>
+                                <td class="d-none d-sm-table-cell">
+                                    1st Period
+                                </td>
+                                <td class="d-none d-sm-table-cell">
+                                    02/15/2019
+                                </td>
+                                <td>Rank and File (Non - Confidential)</td>
+                                <td class="font-size-sm"></td>
+                                <td>
+                                    <em class="text-center text-muted font-size-sm">Locked</em>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">
+                                    <div class="custom-control custom-checkbox d-inline-block">
+                                        <input type="checkbox" class="custom-control-input" id="7" name="wizard-simple-terms">
+                                        <label class="custom-control-label" for="7"></label>
+                                    </div>
+                                </td>
+                                <td ><a [routerLink]="['/payroll/generate-payroll/', 2]">PAY-00006</a></td>
+                                <td class="font-w600 font-size-sm">
+                                    2019
+                                </td>
+                                <td class="d-none d-sm-table-cell font-size-sm">February
+                                </td>
+                                <td class="d-none d-sm-table-cell">
+                                    1st Period
+                                </td>
+                                <td class="d-none d-sm-table-cell">
+                                    02/15/2019
+                                </td>
+                                <td>Rank and File (Non - Confidential)</td>
+                                <td class="font-size-sm"></td>
+                                <td>
+                                    <em class="text-center text-muted font-size-sm">Locked</em>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                    <td class="text-center">
+                                        <div class="custom-control custom-checkbox d-inline-block">
+                                            <input type="checkbox" class="custom-control-input" id="1" name="wizard-simple-terms">
+                                            <label class="custom-control-label" for="1"></label>
+                                        </div>
+                                    </td>
+                                    <td >
+                                        <a [routerLink]="['/payroll/generate-payroll/', 2]">
+                                        PAY-00001
+                                        </a>
+                                    </td>
+                                    <td class="font-w600 font-size-sm">
+                                        2019
+                                    </td>
+                                    <td class="d-none d-sm-table-cell font-size-sm">January
+                                    </td>
+                                    <td class="d-none d-sm-table-cell">
+                                        1st Period
+                                    </td>
+                                    <td class="d-none d-sm-table-cell">
+                                        01/15/2019
+                                    </td>
+                                    <td>Managers (Confidential)</td>
+                                    <td class="font-size-sm">This regular payroll is only for managers</td>
+                                    <td>
+                                        <em class="text-center text-muted font-size-sm">Locked</em>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">
+                                        <div class="custom-control custom-checkbox d-inline-block">
+                                            <input type="checkbox" class="custom-control-input" id="2" name="wizard-simple-terms">
+                                            <label class="custom-control-label" for="2"></label>
+                                        </div>
+                                    </td>
+                                    <td >
+                                        <a [routerLink]="['/payroll/generate-payroll/', 2]">
+                                            PAY-00002
+                                        </a>
+                                    </td>
+                                    <td class="font-w600 font-size-sm">
+                                        2019
+                                    </td>
+                                    <td class="d-none d-sm-table-cell font-size-sm">January
+                                    </td>
+                                    <td class="d-none d-sm-table-cell">
+                                        1st Period
+                                    </td>
+                                    <td class="d-none d-sm-table-cell">
+                                        01/15/2019
+                                    </td>
+                                    <td>Rank and File (Non - Confidential)</td>
+                                    <td class="font-size-sm"></td>
+                                    <td>
+                                        <em class="text-center text-muted font-size-sm">Locked</em>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">
+                                        <div class="custom-control custom-checkbox d-inline-block">
+                                            <input type="checkbox" class="custom-control-input" id="4" name="wizard-simple-terms">
+                                            <label class="custom-control-label" for="4"></label>
+                                        </div>
+                                    </td>
+                                    <td ><a href='/payroll/pay_process/2'>PAY-00003</a></td>
+                                    <td class="font-w600 font-size-sm">
+                                        2019
+                                    </td>
+                                    <td class="d-none d-sm-table-cell font-size-sm">January
+                                    </td>
+                                    <td class="d-none d-sm-table-cell">
+                                        2nd Period
+                                    </td>
+                                    <td class="d-none d-sm-table-cell">
+                                        01/31/2019
+                                    </td>
+                                    <td>Managers (Confidential)</td>
+                                    <td class="font-size-sm">This payroll is only for managers</td>
+                                    <td>
+                                        <em class="text-center text-muted font-size-sm">Locked</em>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">
+                                        <div class="custom-control custom-checkbox d-inline-block">
+                                            <input type="checkbox" class="custom-control-input" id="5" name="wizard-simple-terms">
+                                            <label class="custom-control-label" for="5"></label>
+                                        </div>
+                                    </td>
+                                    <td ><a [routerLink]="['/payroll/generate-payroll/', 2]">PAY-00004</a></td>
+                                    <td class="font-w600 font-size-sm">
+                                        2019
+                                    </td>
+                                    <td class="d-none d-sm-table-cell font-size-sm">January
+                                    </td>
+                                    <td class="d-none d-sm-table-cell">
+                                        2nd Period
+                                    </td>
+                                    <td class="d-none d-sm-table-cell">
+                                        01/31/2019
+                                    </td>
+                                    <td>Rank and File (Non - Confidential)</td>
+                                    <td class="font-size-sm"></td>
+                                    <td>
+                                        <em class="text-center text-muted font-size-sm">Locked</em>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">
+                                        <div class="custom-control custom-checkbox d-inline-block">
+                                            <input type="checkbox" class="custom-control-input" id="6" name="wizard-simple-terms">
+                                            <label class="custom-control-label" for="6"></label>
+                                        </div>
+                                    </td>
+                                    <td ><a [routerLink]="['/payroll/generate-payroll/', 2]">PAY-00005</a></td>
+                                    <td class="font-w600 font-size-sm">
+                                        2019
+                                    </td>
+                                    <td class="d-none d-sm-table-cell font-size-sm">February
+                                    </td>
+                                    <td class="d-none d-sm-table-cell">
+                                        1st Period
+                                    </td>
+                                    <td class="d-none d-sm-table-cell">
+                                        02/15/2019
+                                    </td>
+                                    <td>Managers (Confidential)</td>
+                                    <td class="font-size-sm">This regular payroll is only for managers</td>
+                                    <td>
+                                        <em class="text-center text-muted font-size-sm">Locked</em>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">
+                                        <div class="custom-control custom-checkbox d-inline-block">
+                                            <input type="checkbox" class="custom-control-input" id="7" name="wizard-simple-terms">
+                                            <label class="custom-control-label" for="7"></label>
+                                        </div>
+                                    </td>
+                                    <td ><a [routerLink]="['/payroll/generate-payroll/', 2]">PAY-00006</a></td>
+                                    <td class="font-w600 font-size-sm">
+                                        2019
+                                    </td>
+                                    <td class="d-none d-sm-table-cell font-size-sm">February
+                                    </td>
+                                    <td class="d-none d-sm-table-cell">
+                                        1st Period
+                                    </td>
+                                    <td class="d-none d-sm-table-cell">
+                                        02/15/2019
+                                    </td>
+                                    <td>Rank and File (Non - Confidential)</td>
+                                    <td class="font-size-sm"></td>
+                                    <td>
+                                        <em class="text-center text-muted font-size-sm">Locked</em>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">
+                                        <div class="custom-control custom-checkbox d-inline-block">
+                                            <input type="checkbox" class="custom-control-input" id="7" name="wizard-simple-terms">
+                                            <label class="custom-control-label" for="7"></label>
+                                        </div>
+                                    </td>
+                                    <td ><a [routerLink]="['/payroll/generate-payroll/', 2]">PAY-00006</a></td>
+                                    <td class="font-w600 font-size-sm">
+                                        2019
+                                    </td>
+                                    <td class="d-none d-sm-table-cell font-size-sm">February
+                                    </td>
+                                    <td class="d-none d-sm-table-cell">
+                                        1st Period
+                                    </td>
+                                    <td class="d-none d-sm-table-cell">
+                                        02/15/2019
+                                    </td>
+                                    <td>Rank and File (Non - Confidential)</td>
+                                    <td class="font-size-sm"></td>
+                                    <td>
+                                        <em class="text-center text-muted font-size-sm">Locked</em>
+                                    </td>
+                                </tr>
+                                <tr>
+                        <td class="text-center">
+                            <div class="custom-control custom-checkbox d-inline-block">
+                                <input type="checkbox" class="custom-control-input" id="1" name="wizard-simple-terms">
+                                <label class="custom-control-label" for="1"></label>
+                            </div>
+                        </td>
+                        <td >
+                            <a [routerLink]="['/payroll/generate-payroll/', 2]">
+                            PAY-00001
+                            </a>
+                        </td>
+                        <td class="font-w600 font-size-sm">
+                            2019
+                        </td>
+                        <td class="d-none d-sm-table-cell font-size-sm">January
+                        </td>
+                        <td class="d-none d-sm-table-cell">
+                            1st Period
+                        </td>
+                        <td class="d-none d-sm-table-cell">
+                            01/15/2019
+                        </td>
+                        <td>Managers (Confidential)</td>
+                        <td class="font-size-sm">This regular payroll is only for managers</td>
+                        <td>
+                            <em class="text-center text-muted font-size-sm">Locked</em>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">
+                            <div class="custom-control custom-checkbox d-inline-block">
+                                <input type="checkbox" class="custom-control-input" id="2" name="wizard-simple-terms">
+                                <label class="custom-control-label" for="2"></label>
+                            </div>
+                        </td>
+                        <td >
+                            <a [routerLink]="['/payroll/generate-payroll/', 2]">
+                                PAY-00002
+                            </a>
+                        </td>
+                        <td class="font-w600 font-size-sm">
+                            2019
+                        </td>
+                        <td class="d-none d-sm-table-cell font-size-sm">January
+                        </td>
+                        <td class="d-none d-sm-table-cell">
+                            1st Period
+                        </td>
+                        <td class="d-none d-sm-table-cell">
+                            01/15/2019
+                        </td>
+                        <td>Rank and File (Non - Confidential)</td>
+                        <td class="font-size-sm"></td>
+                        <td>
+                            <em class="text-center text-muted font-size-sm">Locked</em>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">
+                            <div class="custom-control custom-checkbox d-inline-block">
+                                <input type="checkbox" class="custom-control-input" id="4" name="wizard-simple-terms">
+                                <label class="custom-control-label" for="4"></label>
+                            </div>
+                        </td>
+                        <td ><a href='/payroll/pay_process/2'>PAY-00003</a></td>
+                        <td class="font-w600 font-size-sm">
+                            2019
+                        </td>
+                        <td class="d-none d-sm-table-cell font-size-sm">January
+                        </td>
+                        <td class="d-none d-sm-table-cell">
+                            2nd Period
+                        </td>
+                        <td class="d-none d-sm-table-cell">
+                            01/31/2019
+                        </td>
+                        <td>Managers (Confidential)</td>
+                        <td class="font-size-sm">This payroll is only for managers</td>
+                        <td>
+                            <em class="text-center text-muted font-size-sm">Locked</em>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">
+                            <div class="custom-control custom-checkbox d-inline-block">
+                                <input type="checkbox" class="custom-control-input" id="5" name="wizard-simple-terms">
+                                <label class="custom-control-label" for="5"></label>
+                            </div>
+                        </td>
+                        <td ><a [routerLink]="['/payroll/generate-payroll/', 2]">PAY-00004</a></td>
+                        <td class="font-w600 font-size-sm">
+                            2019
+                        </td>
+                        <td class="d-none d-sm-table-cell font-size-sm">January
+                        </td>
+                        <td class="d-none d-sm-table-cell">
+                            2nd Period
+                        </td>
+                        <td class="d-none d-sm-table-cell">
+                            01/31/2019
+                        </td>
+                        <td>Rank and File (Non - Confidential)</td>
+                        <td class="font-size-sm"></td>
+                        <td>
+                            <em class="text-center text-muted font-size-sm">Locked</em>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">
+                            <div class="custom-control custom-checkbox d-inline-block">
+                                <input type="checkbox" class="custom-control-input" id="6" name="wizard-simple-terms">
+                                <label class="custom-control-label" for="6"></label>
+                            </div>
+                        </td>
+                        <td ><a [routerLink]="['/payroll/generate-payroll/', 2]">PAY-00005</a></td>
+                        <td class="font-w600 font-size-sm">
+                            2019
+                        </td>
+                        <td class="d-none d-sm-table-cell font-size-sm">February
+                        </td>
+                        <td class="d-none d-sm-table-cell">
+                            1st Period
+                        </td>
+                        <td class="d-none d-sm-table-cell">
+                            02/15/2019
+                        </td>
+                        <td>Managers (Confidential)</td>
+                        <td class="font-size-sm">This regular payroll is only for managers</td>
+                        <td>
+                            <em class="text-center text-muted font-size-sm">Locked</em>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">
+                            <div class="custom-control custom-checkbox d-inline-block">
+                                <input type="checkbox" class="custom-control-input" id="7" name="wizard-simple-terms">
+                                <label class="custom-control-label" for="7"></label>
+                            </div>
+                        </td>
+                        <td ><a [routerLink]="['/payroll/generate-payroll/', 2]">PAY-00006</a></td>
+                        <td class="font-w600 font-size-sm">
+                            2019
+                        </td>
+                        <td class="d-none d-sm-table-cell font-size-sm">February
+                        </td>
+                        <td class="d-none d-sm-table-cell">
+                            1st Period
+                        </td>
+                        <td class="d-none d-sm-table-cell">
+                            02/15/2019
+                        </td>
+                        <td>Rank and File (Non - Confidential)</td>
+                        <td class="font-size-sm"></td>
+                        <td>
+                            <em class="text-center text-muted font-size-sm">Locked</em>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">
+                            <div class="custom-control custom-checkbox d-inline-block">
+                                <input type="checkbox" class="custom-control-input" id="7" name="wizard-simple-terms">
+                                <label class="custom-control-label" for="7"></label>
+                            </div>
+                        </td>
+                        <td ><a [routerLink]="['/payroll/generate-payroll/', 2]">PAY-00006</a></td>
+                        <td class="font-w600 font-size-sm">
+                            2019
+                        </td>
+                        <td class="d-none d-sm-table-cell font-size-sm">February
+                        </td>
+                        <td class="d-none d-sm-table-cell">
+                            1st Period
+                        </td>
+                        <td class="d-none d-sm-table-cell">
+                            02/15/2019
+                        </td>
+                        <td>Rank and File (Non - Confidential)</td>
+                        <td class="font-size-sm"></td>
+                        <td>
+                            <em class="text-center text-muted font-size-sm">Locked</em>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>	
+    </div>
+
+
+</div>

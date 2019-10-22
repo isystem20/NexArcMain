@@ -1,0 +1,142 @@
+<div class="block">
+    <div class="block-header">
+        
+        <h3 class="block-title">
+        <a [routerLink]="['/payroll/generate-payroll/1']">
+            <i class="fas fa-arrow-left"></i> &nbsp;&nbsp;
+        </a>
+        Payroll Employee Details
+        </h3>
+        <div class="block-options">
+            <button type="button" class="btn btn-sm btn-success">
+                    <i class="fa fa-sync"></i> Reprocess
+            </button>
+
+            <div class="btn-group btn-group-sm" role="group">
+                <button type="button" class="btn btn-primary dropdown-toggle" id="btnGroupTabs1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-print"></i> Print   
+                </button>
+                <div class="dropdown-menu dropdown-menu-right font-size-sm" aria-labelledby="btnGroupTabs1">
+                    <a class="dropdown-item" href="javascript:void(0)">
+                        <i class="fas fa-receipt"></i> Payslip
+                    </a>
+                    <a class="dropdown-item" href="javascript:void(0)">
+                        <i class="far fa-clipboard"></i> Monthly PayReg
+                    </a>
+                    <div role="separator" class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="javascript:void(0)">
+                        <i class="fas fa-clipboard"></i> Yearly PayReg
+                    </a>
+                </div>
+            </div>
+            <button type="button" class="btn btn-sm btn-danger">
+                <i class="fa fa-trash"></i>
+                Remove
+            </button>
+        </div>
+    </div>
+  
+       
+
+
+
+
+    <div class="block-content">
+        <form class="col-lg-12">
+            <div class="row font-size-sm">
+                <div class="col-3">
+                    <div class="form-group">
+                        <label>Code</label>
+                        <input type="text" class="form-control" value="PAY-0001" readonly />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" value="Juan Dela Cruz" readonly />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Monthly Rate</label>
+                        <input type="text" class="form-control" value="18,000.00" readonly />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Daily Rate</label>
+                        <input type="text" class="form-control" value="867.19" readonly />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Hourly Rate</label>
+                        <input type="text" class="form-control" value="108.40" readonly />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Position</label>
+                        <input type="text" class="form-control" value="Software Developer" readonly />
+                    </div>
+                </div>
+                <div class="col-9">
+                    <div class="form-group">
+                        <div class="block">
+                            <ul class="nav nav-tabs nav-tabs-block align-items-center js-tabs-enabled" data-toggle="tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#btabswob-static-home">Earnings</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#btabswob-static-home">Deductions</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#btabswob-static-home">Loan Details</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#btabswob-static-home">Computations</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#btabswob-static-home">History</a>
+                                </li>
+                            </ul>
+                            <div class="block-content tab-content">
+                                <div class="tab-pane active" id="btabswob-static-home" role="tabpanel">
+                                    <table class="table table-bordered table-striped table-vcenter d-none d-sm-table-cell js-dataTable-full-pagination">
+                                        <thead>                                                    
+                                            <tr>
+                                                <th>Pay Items</th>
+                                                <th class="text-right">Hours</th>
+                                                <th class="text-right">Minutes</th>
+                                                <th class="text-right">Amount</th>
+                                                <th class="text-right">System Remarks</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Reg Basic</td>
+                                                <td>40.00</td>
+                                                <td>2400.00</td>
+                                                <td> 15,000.00 </td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Commission</td>
+                                                <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td> 15,000.00 </td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tardy</td>
+                                                <td>1.00</td>
+                                                <td>60.00</td>
+                                                <td>150.00 </td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

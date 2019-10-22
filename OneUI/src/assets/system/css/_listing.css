@@ -1,0 +1,64 @@
+.listing {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    height: calc(100vh - 85px);
+    background-color: white;
+}
+
+.listing .listing-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 5px;
+    background-color:##5c80d1;
+    margin-bottom: 5px;
+}
+
+.listing .listing-header .listing-btn-grp {
+    display: flex;
+    min-height: 30px;
+    max-height: 30px;
+    padding-right: 5px;
+}
+
+.listing .listing-holder {
+    flex: 1;
+    padding: 20px;
+    /* background-color: #333; */
+    max-height: calc(100vh - 120px);
+    border-radius: 10px;
+}
+
+.listing-holder .tbl-holder {
+    width: calc(100vw - 305px);
+    height: calc(100% - 35px);
+    overflow: auto;
+}
+
+.listing .listing-footer {
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #777;
+    justify-content: space-between;
+    padding: 10px 5px 0 5px;
+}
+
+
+.main-container {
+    position: relative;
+}
+
+.module-title {
+    z-index: 2;
+    top: 8px;
+    left: 6px;
+    font-size: 15px;
+    font-weight: 500;
+    position: absolute;
+    max-width: calc(50% - 15px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-left: 15px;
+}

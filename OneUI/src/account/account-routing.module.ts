@@ -11,7 +11,7 @@ import { AccountComponent } from './account.component';
                 path: '',
                 component: AccountComponent,
                 children: [
-                    { path: 'login2', component: LoginComponent },
+                    { path: 'login', component: LoginComponent },
                     { path: 'register', component: RegisterComponent }
                 ]
             }

@@ -47,5 +47,6 @@ namespace NEXARC.EntityFrameworkCore
             : base(options)
         {
         }
+
     }
 }

@@ -1,17 +1,76 @@
-﻿using System;
+﻿using nextoolkit.Models;
+using nextoolkit.MVC;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
 namespace nextoolkit
 {
-    class Program
+    public class Program
     {
+
+        public static string project; // project name
+        public static char[] delim = { '/', '.', '\\' };
+        public static string newEntity;
+        public static string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+
+
+        public static IDictionary<string, string> EntityAttributes = new Dictionary<string, string>();
+
+        public static string[] importedAttributes = { };
+        public static string attributeIndicator = "{ get; set; }";
+        public static string namespaceIndicator = "namespace";
+        public static string[] attributeDataTypes = { "string", "int", "boolean", "datetime", "datetime?", "long", "float", "byte[]", "double", "bool" };
+
+        //NameSpaces
+        public static string referencedEntityNameSpace;
+        public static List<string> optionalNameSpaces = new List<string> { };
+        public static string[] appServiceNameSpaces = { };
+
+        //AppService
+        public static string appFolder = $"src\\Application\\";
+        public static string appPath; //AppService Folder
+        public static string appPathDto;
+        public static string prefixPermission;
+
+        //MVC
+        public static string mvcProject = $"src\\Web.Mvc\\";
+        public static string mvcController = $"src\\Web.Mvc\\Controllers\\";
+        public static string mvcModels = $"src\\Web.Mvc\\Models\\";
+        public static string mvcViews = $"src\\Web.Mvc\\Views\\";
+
         static void Main(string[] args)
         {
 
-            var run = "Y";
+            #region Testings
 
+            var path = getCommand("Directory to Duplicate ", true);
+
+            var newpath = getCommand("New Directory ", true);
+
+            var strToSearch = getCommand("String to search", true);
+
+            var strToReplace = getCommand("String to replace", true);
+
+
+
+            var d = new Duplicator();
+
+            d.MapDirectoryAndFiles(path,newpath, strToSearch, strToReplace);
+
+
+            Console.WriteLine("Press any key to exit.");
+            System.Console.ReadKey();
+            Environment.Exit(0);
+            #endregion
+
+
+
+
+
+
+            var run = "Y";
 
             do
             {
@@ -19,502 +78,84 @@ namespace nextoolkit
                 Console.WriteLine("This console program is intended to generate ABP Modules.");
 
                 //Get Project Prefix Name
-                Console.Write("\nProject Prefix : ");
-                var project = Console.ReadLine();
+                project = getCommand("Project Prefix",true);
 
                 //Initiate Application Folder
-                var appPath = "";
                 if (project != "")
                 {
-                    appPath = $"src\\{project}.Application\\";
+                    appFolder = $"src\\{project}.Application\\";
                 }
-                else
-                {
-                    appPath = $"src\\Application\\";
-                }
-
 
                 //Get Entity Name or Folder
-                var entity = "";
-                do
-                {
-                    Console.Write("\nEnter Entity Name:");
-                    entity = Console.ReadLine();
-                } while (entity == "");
+                var tempEntity = getCommand("Enter Entity Name", true);
 
-                char[] delim = { '/', '.','\\' };
 
-                var n = entity.Split(delim);
-
-                var currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
-
-                appPath = currentDirectory + appPath;
-
-                var newEntity = "";
-                if (n.Length > 1)
-                {
-                    var e = n.Length - 1;
-
-                    for (int i = 0; i < n.Length - 1; i++)
-                    {
-                        //Console.WriteLine($"\n{n[i]}");
-                        appPath = appPath + n[i] + '\\';
-                    }
-                    newEntity = n[e];
-
-                }
-                else
-                {
-                    newEntity = entity;
-                }
-
-                //App Service Path
-                appPath = appPath + newEntity + "\\";
+                //Parse the entity string and get file path
+                var appDirectory = entityPathParser(tempEntity);
 
                 //Dto App
                 var appPathDto = appPath + "Dto\\";
 
-                //Make the directory
-                if (!System.IO.Directory.Exists(appPath))
-                {
-                    System.IO.Directory.CreateDirectory(appPath);
-                }
+                makeDirectory(appPath);
+                makeDirectory(appPathDto);
 
-                //Make the directory
-                if (!System.IO.Directory.Exists(appPathDto))
-                {
-                    System.IO.Directory.CreateDirectory(appPathDto);
-                }
+                var auth = getCommand("Add Authentication to this module ? Y / N(Y)",false,"N").ToUpper();
 
-                var auth = "Y";
-                Console.Write("\nAdd Authentication to this module? Y/N (Y)");
-                auth = Console.ReadLine().ToUpper();
+                //var prefixPermission = "";
 
-
-                var prefixPermission = "";
                 if (auth == "Y")
                 {
-                    Console.Write("\nPermission Prefix:");
-                    prefixPermission = Console.ReadLine() + ".";
-
+                    prefixPermission = getCommand("Permission Prefix", false, "N");
                 }
 
-                string[] allFiles = Directory.GetFiles(currentDirectory, newEntity + ".cs", SearchOption.AllDirectories);
+                LocateAndParseEntity();
 
-                string[] forAddition = { };
-                string namespaceString = "";
-                var findVars = "{ get; set; }";
-                var findNameSpace = "namespace";
+                LocateOptionalReferences();
 
-                var entityModel = "";
-                if (allFiles.Length > 0)
+                var asm = new AppServiceModel
                 {
-                    entityModel = allFiles[0];
+                    appPath = appPath,
+                    newEntity = newEntity,
+                    referencedEntityNameSpace = referencedEntityNameSpace,
+                    project = project,
+                    prefixPermission = prefixPermission,
+                    appPathDto = appPathDto,
+                    optionalNameSpaces = optionalNameSpaces,
+                    importedAttributes = importedAttributes,
+                    appServiceNameSpaces = appServiceNameSpaces
+                };
 
-                    string[] lines = File.ReadAllLines(entityModel);
+                var _appService = new AppService();
 
-                    foreach (string line in lines)
-                    {
-                        if (line.Contains(findVars))
-                        {
-                            if (!line.Contains("ICollection"))
-                            {
-                                Array.Resize(ref forAddition, forAddition.Length + 1);
-                                forAddition[forAddition.Length - 1] = line;
-                            }
+                var _appServiceDto = new AppServiceDto();
 
-                        }
+                _appService.CreateAppService(asm);
 
-                        if (line.Contains(findNameSpace))
-                        {
-                            namespaceString = line.Replace(findNameSpace + " ","");
-                        }
+                _appService.CreateAppServiceInterface(asm);
 
-                    }
-
-                    Console.WriteLine("\nEntity Found:" + entityModel);
-
-                }
+                _appServiceDto.CreateAll(asm);
 
 
+                //Apply Authentication
+                createPermission();
 
-                //Optional References
-                Console.WriteLine("\nAdditional Optional References (Enum, other Entites, Etc) separated by comma (,):");
+                var fe = "";
 
-                var optionalNAmeSpaces = new List<string> { };
-                string[] newOptNameSpaces = { };
-                var opt = Console.ReadLine();
+                Console.Write("\nGenerate FrontEnd? (MVC,Angular) Just press ENTER to SKIP");
+                fe = Console.ReadLine().ToUpper();
 
-                if (opt != "")
+                switch (fe)
                 {
-                    optionalNAmeSpaces = opt.Split(',').ToList();
-                    var searched = Directory.GetFiles(currentDirectory, "*.cs", SearchOption.AllDirectories);
-                    var refIndex = searched.Where(f => optionalNAmeSpaces.IndexOf(Path.GetFileName(f)) >= 0).ToArray();
-
-                    foreach (var item in refIndex)
-                    {
-                        Console.WriteLine($"refIndex: {item}");
-                    }
-
-
-
-                    if (refIndex.Length > 0)
-                    {
-                        foreach (var file in refIndex)
-                        {
-                            Console.WriteLine($"Found: {file}");
-                            string[] lines = File.ReadAllLines(file);
-
-                            foreach (var line in lines)
-                            {
-                                if (line.Contains(findNameSpace))
-                                {
-                                    Console.WriteLine($"Added: {line}");
-                                    Array.Resize(ref newOptNameSpaces, newOptNameSpaces.Length + 1);
-                                    newOptNameSpaces[newOptNameSpaces.Length - 1] = line.Replace(findNameSpace + " ", "");
-                                }
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Optional References not found: {opt}");
-                    }
-
+                    case "MVC":
+                        Console.WriteLine("Case 1");
+                        break;
+                    case "ANGULAR":
+                        Console.WriteLine("Case 2");
+                        break;
+                    default:
+                        Console.WriteLine("Skip?");
+                        break;
                 }
-
-
-
-                #region Create App Service
-                //Make AppService
-                var pathString = Path.Combine(appPath, newEntity + "AppService.cs");
-                using (StreamWriter file = new StreamWriter(pathString, true))
-                {
-                    //Add the Entity refence
-                    if (namespaceString != "")
-                    {
-                        file.WriteLine("using " + namespaceString + ";");
-                    }
-                    file.WriteLine("using Abp.Application.Services;");
-                    file.WriteLine("using Abp.Application.Services.Dto;");
-                    file.WriteLine("using Abp.Authorization;");
-                    file.WriteLine("using " + project + ".Authorization;");
-                    file.WriteLine("using Abp.Collections.Extensions;");
-                    file.WriteLine("using Abp.Domain.Repositories;");
-                    file.WriteLine("using Abp.Extensions;");
-                    file.WriteLine("using " + project + ".Nex" + newEntity + ".Dto;");
-                    file.WriteLine("using System;");
-                    file.WriteLine("using System.Collections.Generic;");
-                    file.WriteLine("using System.Linq;");
-                    file.WriteLine("using System.Text;");
-                    file.WriteLine("using System.Threading.Tasks;");
-                    file.WriteLine("using Abp.Linq.Extensions;");
-                    file.WriteLine("");
-                    file.WriteLine("namespace " + project + ".Nex" + newEntity);
-                    file.WriteLine("{");
-
-                    //Apply Authentication if desired
-                    if (namespaceString != "")
-                    {
-                        file.WriteLine("\t//[AbpAuthorize(\"" + prefixPermission + newEntity + "\")]");
-                    }
-
-                    file.WriteLine("\tpublic class " + newEntity + "AppService : AsyncCrudAppService<" + newEntity + ", " + newEntity + "Dto, int, Paged" + newEntity + "ResultRequestDto, Create" + newEntity + "Dto, Update" + newEntity + "Dto>, I" + newEntity + "AppService");
-                    file.WriteLine("\t{");
-                    file.WriteLine("");
-                    file.WriteLine("\t\tprivate readonly IRepository<" + newEntity + "> _r" + newEntity + ";");
-                    file.WriteLine("");
-                    file.WriteLine("\t\tpublic " + newEntity + "AppService(IRepository<" + newEntity + "> r" + newEntity + ") : base(r" + newEntity + ")");
-                    file.WriteLine("\t\t{");
-                    file.WriteLine("\t\t\t_r" + newEntity + " = r" + newEntity + ";");
-                    file.WriteLine("\t\t}");
-                    file.WriteLine("");
-                    //Apply Authentication for READ
-                    if (namespaceString != "")
-                    {
-                        file.WriteLine("\t\t[AbpAuthorize(\"" + prefixPermission + newEntity + ".Read\")]");
-                    }
-                    file.WriteLine("\t\tprotected override IQueryable<" + newEntity + "> CreateFilteredQuery(Paged" + newEntity + "ResultRequestDto input)");
-                    file.WriteLine("\t\t{");
-                    file.WriteLine("\t\t\treturn Repository.GetAll()");
-                    file.WriteLine("\t\t\t\t.WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Keyword))");
-                    file.WriteLine("\t\t\t\t.WhereIf(input.Status.HasValue, x => x.Status == input.Status);");
-                    file.WriteLine("\t\t}");
-
-                    file.WriteLine("");
-                    //Apply Authentication for CREATE
-                    if (namespaceString != "")
-                    {
-                        file.WriteLine("\t\t[AbpAuthorize(\"" + prefixPermission + newEntity + ".Create\")]");
-                    }
-                    file.WriteLine("\t\tpublic override async Task<" + newEntity + "Dto> Create(Create" + newEntity + "Dto input)");
-                    file.WriteLine("\t\t{");
-                    file.WriteLine("\t\t\tvar entity = MapToEntity(input);");
-                    file.WriteLine("");
-                    file.WriteLine("\t\t\tawait Repository.InsertAsync(entity);");
-                    file.WriteLine("\t\t\tawait CurrentUnitOfWork.SaveChangesAsync();");
-                    file.WriteLine("");
-                    file.WriteLine("\t\t\treturn MapToEntityDto(entity);");
-                    file.WriteLine("\t\t}");
-                    file.WriteLine("");
-
-                    //Apply Authentication for UPDATE
-                    if (namespaceString != "")
-                    {
-                        file.WriteLine("\t\t[AbpAuthorize(\"" + prefixPermission + newEntity + ".Update\")]");
-                    }
-                    file.WriteLine("\t\tpublic override async Task<" + newEntity + "Dto> Update(Update" + newEntity + "Dto input)");
-                    file.WriteLine("\t\t{");
-                    file.WriteLine("\t\t\tvar entity = await GetEntityByIdAsync(input.Id);");
-                    file.WriteLine("");
-                    file.WriteLine("\t\t\tMapToEntity(input, entity);");
-                    file.WriteLine("\t\t\tawait CurrentUnitOfWork.SaveChangesAsync();");
-                    file.WriteLine("");
-                    file.WriteLine("\t\t\treturn MapToEntityDto(entity);");
-                    file.WriteLine("\t\t}");
-
-                    //Apply Authentication for DELETE
-                    if (namespaceString != "")
-                    {
-                        file.WriteLine("\t\t[AbpAuthorize(\"" + prefixPermission + newEntity + ".Delete\")]");
-                    }
-                    file.WriteLine("\t\tpublic override async Task Delete(EntityDto<int> input)");
-                    file.WriteLine("\t\t{");
-                    file.WriteLine("\t\t\tvar record = await _r" + newEntity + ".FirstOrDefaultAsync(input.Id);");
-                    file.WriteLine("");
-                    file.WriteLine("\t\t\tawait _r" + newEntity + ".DeleteAsync(record);");
-                    file.WriteLine("\t\t}");
-
-                    //Apply Authentication for READ SINGLE
-                    if (namespaceString != "")
-                    {
-                        file.WriteLine("\t\t[AbpAuthorize(\"" + prefixPermission + newEntity + ".Read\")]");
-                    }
-                    file.WriteLine("\t\tprotected override async Task<" + newEntity + "> GetEntityByIdAsync(int id)");
-                    file.WriteLine("\t\t{");
-                    file.WriteLine("\t\t\treturn await Repository.GetAsync(id);");
-                    file.WriteLine("\t\t}");
-
-                    file.WriteLine("");
-                    file.WriteLine("\t}");
-                    file.WriteLine("}");
-                }
-                Console.Write($"\nFile Generated:\n{newEntity}AppService.cs");
-                #endregion
-
-                #region App Service Interface
-                //Make Update EntityDto
-                var aidtoString = Path.Combine(appPath, "I" + newEntity + "AppService.cs");
-                using (StreamWriter file = new StreamWriter(aidtoString, true))
-                {
-                    file.WriteLine("using Abp.Application.Services;");
-                    file.WriteLine("using " + project + ".Nex" + newEntity + ".Dto;");
-                    file.WriteLine("");
-                    file.WriteLine("namespace " + project + ".Nex" + newEntity + "");
-                    file.WriteLine("{");
-                    file.WriteLine("\tpublic interface I" + newEntity + "AppService : IAsyncCrudAppService<" + newEntity + "Dto, int, Paged" + newEntity + "ResultRequestDto, Create" + newEntity + "Dto, Update" + newEntity + "Dto>");
-                    file.WriteLine("\t{");
-                    file.WriteLine("");
-                    file.WriteLine("\t\t//Put something if applicable");
-                    file.WriteLine("");
-                    file.WriteLine("\t}");
-                    file.WriteLine("}");
-                }
-                Console.Write($"\nI" + newEntity + "AppService.cs");
-                #endregion
-
-
-                #region EntityDto
-                //Make AppService
-                var dtoString = Path.Combine(appPathDto, newEntity + "Dto.cs");
-                using (StreamWriter file = new StreamWriter(dtoString, true))
-                {
-                    //Add the Entity refence
-                    if (namespaceString != "")
-                    {
-                        file.WriteLine("using " + namespaceString + ";");
-                    }
-                    foreach (var ns in newOptNameSpaces)
-                    {
-                        file.WriteLine("using " + ns + ";");
-                    }
-                    file.WriteLine("using Abp.Application.Services;");
-                    file.WriteLine("using Abp.AutoMapper;");
-                    file.WriteLine("using Abp.Application.Services.Dto;");
-                    file.WriteLine("using System;");
-                    file.WriteLine("");
-                    file.WriteLine("namespace " + project + ".Nex" + newEntity + ".Dto");
-                    file.WriteLine("{");
-                    file.WriteLine("\t[AutoMapFrom(typeof(" + newEntity + "))]");
-                    file.WriteLine("\tpublic class " + newEntity + "Dto : EntityDto<int>");
-                    file.WriteLine("\t{");
-                    file.WriteLine("");
-                    foreach (var l in forAddition)
-                    {
-                        //Console.WriteLine($"\nAdded Line: {l}");
-                        file.WriteLine(l);
-                    }
-                    file.WriteLine("");
-                    file.WriteLine("\t}");
-                    file.WriteLine("}");
-                }
-                Console.Write($"\n{newEntity}Dto.cs");
-                #endregion
-
-                #region Create EntityDto
-                //Make Create Entity Dto
-                var cdtoString = Path.Combine(appPathDto, "Create" + newEntity + "Dto.cs");
-                using (StreamWriter file = new StreamWriter(cdtoString, true))
-                {
-                    //Add the Entity refence
-                    if (namespaceString != "")
-                    {
-                        file.WriteLine("using " + namespaceString + ";");
-                    }
-                    foreach (var ns in newOptNameSpaces)
-                    {
-                        file.WriteLine("using " + ns + ";");
-                    }
-                    file.WriteLine("using Abp.AutoMapper;");
-                    file.WriteLine("using System.ComponentModel.DataAnnotations;");
-                    file.WriteLine("using System;");
-                    file.WriteLine("");
-                    file.WriteLine("namespace " + project + ".Nex" + newEntity + ".Dto");
-                    file.WriteLine("{");
-                    file.WriteLine("\t[AutoMapTo(typeof(" + newEntity + "))]");
-                    file.WriteLine("\tpublic class Create" + newEntity + "Dto");
-                    file.WriteLine("\t{");
-                    file.WriteLine("");
-                    foreach (var l in forAddition)
-                    {
-                        file.WriteLine("\t\t[Required]");
-                        file.WriteLine(l);
-                    }
-                    file.WriteLine("");
-                    file.WriteLine("\t}");
-                    file.WriteLine("}");
-                }
-                Console.Write($"\nCreate{newEntity}Dto.cs");
-                #endregion
-
-                #region Update EntityDto
-                //Make Update EntityDto
-                var udtoString = Path.Combine(appPathDto, "Update" + newEntity + "Dto.cs");
-                using (StreamWriter file = new StreamWriter(udtoString, true))
-                {
-                    //Add the Entity refence
-                    if (namespaceString != "")
-                    {
-                        file.WriteLine("using " + namespaceString + ";");
-                    }
-                    file.WriteLine("using Abp.Application.Services.Dto;");
-                    file.WriteLine("using System.ComponentModel.DataAnnotations;");
-                    file.WriteLine("using System;");
-                    file.WriteLine("using Abp.AutoMapper;");
-                    file.WriteLine("");
-                    file.WriteLine("namespace " + project + ".Nex" + newEntity + ".Dto");
-                    file.WriteLine("{");
-                    file.WriteLine("\t[AutoMapTo(typeof(" + newEntity + "))]");
-                    file.WriteLine("\tpublic class Update" + newEntity + "Dto : Create" + newEntity + "Dto, IEntityDto");
-                    file.WriteLine("\t{");
-                    file.WriteLine("");
-                    file.WriteLine("\t\tpublic int Id { get; set; }");
-                    file.WriteLine("");
-                    file.WriteLine("\t}");
-                    file.WriteLine("}");
-                }
-                Console.Write($"\nUpdate{newEntity}Dto.cs");
-                #endregion
-
-                #region Paged Entity Dto
-                //Make Update EntityDto
-                var pdtoString = Path.Combine(appPathDto, "Paged" + newEntity + "ResultRequestDto.cs");
-                using (StreamWriter file = new StreamWriter(pdtoString, true))
-                {
-                    foreach (var ns in newOptNameSpaces)
-                    {
-                        file.WriteLine("using " + ns + ";");
-                    }
-                    file.WriteLine("using Abp.Application.Services.Dto;");
-                    file.WriteLine("");
-                    file.WriteLine("namespace " + project + ".Nex" + newEntity + ".Dto");
-                    file.WriteLine("{");
-                    file.WriteLine("\tpublic class Paged" + newEntity + "ResultRequestDto : PagedResultRequestDto");
-                    file.WriteLine("\t{");
-                    file.WriteLine("");
-                    file.WriteLine("\t\tpublic string Keyword { get; set; }");
-                    file.WriteLine("\t\tpublic RecordStatus? Status { get; set; }");
-                    file.WriteLine("");
-                    file.WriteLine("\t}");
-                    file.WriteLine("}");
-                }
-                Console.Write($"\nPaged{newEntity}ResultRequestDto.cs");
-                #endregion
-
-
-
-                //Register Permission Names
-                //Apply Authentication if desired
-                if (namespaceString != "")
-                {
-                    string[] permissionProvider = Directory.GetFiles(currentDirectory, project + "AuthorizationProvider.cs", SearchOption.AllDirectories);
-
-                    if (permissionProvider.Count() > 0)
-                    {
-                        Console.Write("Auth Provider Found:" + permissionProvider[0]);
-                        string[] lines = File.ReadAllLines(permissionProvider[0]);
-                        var newContent = new List<string> { };
-                        int lastline = 0;
-
-                        for (int i = 0; i < lines.Length; i++)
-                        {
-                            if (lines[i].Contains("CreatePermission") || lines[i].Contains("CreateChildPermission"))
-                            {
-                                lastline = i;
-                            }
-                        }
-
-                        for (int i = 0; i < lines.Length; i++)
-                        {
-                            if (i == lastline)
-                            {
-                                newContent.Add(lines[i]);
-                                newContent.Add("");
-                                newContent.Add("\t\t\tcontext.CreatePermission(\"" + prefixPermission + newEntity + "\",L(\"" + prefixPermission + " " + newEntity + "\"))");
-                                newContent.Add("\t\t\t\t.CreateChildPermission(\"" + prefixPermission + newEntity + ".Create\",L(\"" + prefixPermission + " Create " + newEntity + "\"))");
-                                newContent.Add("\t\t\t\t.CreateChildPermission(\"" + prefixPermission + newEntity + ".Read\",L(\"" + prefixPermission + " Read " + newEntity + "\"))");
-                                newContent.Add("\t\t\t\t.CreateChildPermission(\"" + prefixPermission + newEntity + ".Update\",L(\"" + prefixPermission + " Update " + newEntity + "\"))");
-                                newContent.Add("\t\t\t\t.CreateChildPermission(\"" + prefixPermission + newEntity + ".Delete\",L(\"" + prefixPermission + " Delete " + newEntity + "\"));");
-                            }
-                            else
-                            {
-                                newContent.Add(lines[i]);
-                            }
-                        }
-
-                        File.WriteAllText(permissionProvider[0], String.Empty);
-
-                        using (StreamWriter file = new StreamWriter(permissionProvider[0], true))
-                        {
-                            foreach (var line in newContent)
-                            {
-                                file.WriteLine(line);
-                                //Console.WriteLine(line);
-                            }    
-
-                        }
-
-                       
-
-
-                    }
-
-
-                    //file.WriteLine("\t[AbpAuthorize(PermissionNames.Pages_" + newEntity + "CRUD)]");
-                }
-
-
 
                 Console.WriteLine("\n\n\nRun again? Y/N");
                 run = Console.ReadLine().ToUpper();
@@ -526,6 +167,285 @@ namespace nextoolkit
             System.Console.ReadKey();
 
 
+        }
+
+        private static string entityPathParser(string entityString)
+        {
+            var n = entityString.Split(delim);
+
+            appPath = baseDirectory + appFolder;
+
+            if (n.Length > 1)
+            {
+                var e = n.Length - 1;
+
+                for (int i = 0; i < n.Length - 1; i++)
+                {
+                    appPath = appPath + n[i] + '\\';
+                }
+                newEntity = n[e];
+
+            }
+            else
+            {
+                newEntity = entityString;
+            }
+
+            appPath = appPath + newEntity + "\\";
+
+            return appPath;
+
+        }
+        private static string getCommand(string caption, Boolean isRequired, string defaultValue = "")
+        {
+            if (isRequired)
+            {
+                var result = "";
+                do
+                {
+                    Console.Write("\n" + caption + " : ");
+                    result = Console.ReadLine();
+                } while (result == "");
+
+                return result;
+
+            }
+            else
+            {
+                Console.Write("\n" + caption + " : ");
+                var result = Console.ReadLine();
+                return result;
+            }
+        }
+        private static void getEntityAttributes(string filePath)
+        {
+            string[] lines = File.ReadAllLines(filePath);
+
+            foreach (string line in lines)
+            {
+                if (line.Contains(attributeIndicator))
+                {
+                    if (!line.Contains("ICollection") || !line.Contains($"//public"))
+                    {
+                        var lineMap = line.Split(' ');
+                        if (lineMap[0] == "public")
+                        {
+                            if (attributeDataTypes.Any(x => x == lineMap[1]))
+                            {
+                                EntityAttributes.Add(lineMap[1],lineMap[2]);
+                            }
+                            else
+                            {
+                                EntityAttributes.Add("int", lineMap[2]);
+                            }
+                            
+                        }
+                        Array.Resize(ref importedAttributes, importedAttributes.Length + 1);
+                        importedAttributes[importedAttributes.Length - 1] = line;
+                    }
+
+                }
+
+                if (line.Contains(namespaceIndicator))
+                {
+                    referencedEntityNameSpace = line.Replace(namespaceIndicator + " ", "");
+                }
+
+            }
+        }
+        private static void makeDirectory(string path)
+        {
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+        }
+        private static List<string> getEntityAttributes()
+        {
+
+
+
+            return null;
+        }
+        private static void createPermission()
+        {
+            if (referencedEntityNameSpace != "")
+            {
+                string[] permissionProvider = Directory.GetFiles(baseDirectory, project + "AuthorizationProvider.cs", SearchOption.AllDirectories);
+
+                if (permissionProvider.Count() > 0)
+                {
+                    Console.Write("Auth Provider Found:" + permissionProvider[0]);
+                    string[] lines = File.ReadAllLines(permissionProvider[0]);
+                    var newContent = new List<string> { };
+                    int lastline = 0;
+
+                    for (int i = 0; i < lines.Length; i++)
+                    {
+                        if (lines[i].Contains("CreatePermission") || lines[i].Contains("CreateChildPermission"))
+                        {
+                            lastline = i;
+                        }
+                    }
+
+                    for (int i = 0; i < lines.Length; i++)
+                    {
+                        if (i == lastline)
+                        {
+                            newContent.Add(lines[i]);
+                            newContent.Add("");
+                            newContent.Add("\t\t\tcontext.CreatePermission(\"" + prefixPermission + newEntity + "\",L(\"" + prefixPermission + " " + newEntity + "\"))");
+                            newContent.Add("\t\t\t\t.CreateChildPermission(\"" + prefixPermission + newEntity + ".Create\",L(\"" + prefixPermission + " Create " + newEntity + "\"))");
+                            newContent.Add("\t\t\t\t.CreateChildPermission(\"" + prefixPermission + newEntity + ".Read\",L(\"" + prefixPermission + " Read " + newEntity + "\"))");
+                            newContent.Add("\t\t\t\t.CreateChildPermission(\"" + prefixPermission + newEntity + ".Update\",L(\"" + prefixPermission + " Update " + newEntity + "\"))");
+                            newContent.Add("\t\t\t\t.CreateChildPermission(\"" + prefixPermission + newEntity + ".Delete\",L(\"" + prefixPermission + " Delete " + newEntity + "\"));");
+                        }
+                        else
+                        {
+                            newContent.Add(lines[i]);
+                        }
+                    }
+                    File.WriteAllText(permissionProvider[0], String.Empty);
+                    using (StreamWriter file = new StreamWriter(permissionProvider[0], true))
+                    {
+                        foreach (var line in newContent)
+                        {
+                            file.WriteLine(line);
+                        }
+                    }
+                }
+                //file.WriteLine("\t[AbpAuthorize(PermissionNames.Pages_" + newEntity + "CRUD)]");
+            }
+        }
+        private static void generateMVC()
+        {
+            //Check Mvc project exists
+            if (project != "")
+            {
+                mvcProject = $"src\\{project}.Web.Mvc\\";
+            }
+
+
+            //create Controller
+
+
+
+
+            //create Model
+
+
+
+            //register pageName
+
+
+            //create View
+
+
+
+            //create ajax
+
+
+
+
+
+
+        }
+        private static void displayText(string[] text, ConsoleColor bgColor, ConsoleColor foreColor, bool autoReset = true)
+        {
+            Console.BackgroundColor = bgColor;
+            Console.ForegroundColor = foreColor;
+            foreach (var t in text)
+            {
+                Console.Write($"\n{t}");
+            }
+            if (autoReset)
+            {
+                Console.ResetColor();
+            }
+        }
+        private static void LocateAndParseEntity()
+        {
+            #region Entities and Attributes
+            string[] allFiles = Directory.GetFiles(baseDirectory, newEntity + ".cs", SearchOption.AllDirectories);
+
+            if (allFiles.Count() > 1)
+            {
+                var foundEntities = "";
+                for (int i = 0; i < allFiles.Length; i++)
+                {
+                    foundEntities += $"\n[{i}] {allFiles[i]}";
+                }
+
+                var selectedEntity = getCommand("Multiple Entities Found. Please select which " + foundEntities, true);
+                int parsedSelection;
+                if (int.TryParse(selectedEntity, out parsedSelection))
+                {
+                    if (parsedSelection <= allFiles.Length - 1 && parsedSelection >= 0)
+                    {
+                        getEntityAttributes(allFiles[parsedSelection]);
+                    }
+                    else
+                    {
+                        string[] error = { "Input is out of range." };
+                        displayText(error, ConsoleColor.Black, ConsoleColor.Red);
+                    }
+
+                }
+                else
+                {
+                    string[] error = { "Input is not integer" };
+                    displayText(error, ConsoleColor.Black, ConsoleColor.Red);
+                }
+
+            }
+            else if (allFiles.Count() == 1)
+            {
+                getEntityAttributes(allFiles[0]);
+            }
+            else
+            {
+                string[] error = { "Entity not found." };
+                displayText(error, ConsoleColor.Black, ConsoleColor.White);
+            }
+
+            #endregion
+        }
+        private static void LocateOptionalReferences()
+        {
+            #region Optional Referencing
+
+            var optionalReferenceString = getCommand("Additional Optional References separated by comma (,) must include the file extension.", false);
+
+            if (optionalReferenceString != "")
+            {
+                optionalNameSpaces = optionalReferenceString.Split(',').ToList();
+                var searched = Directory.GetFiles(baseDirectory, "*.cs", SearchOption.AllDirectories);
+                var refIndex = searched.Where(f => optionalNameSpaces.IndexOf(Path.GetFileName(f)) >= 0).ToArray();
+                if (refIndex.Length > 0)
+                {
+                    foreach (var file in refIndex)
+                    {
+                        Console.WriteLine($"Found: {file}");
+                        string[] lines = File.ReadAllLines(file);
+                        foreach (var line in lines)
+                        {
+                            if (line.Contains(namespaceIndicator))
+                            {
+                                Array.Resize(ref appServiceNameSpaces, appServiceNameSpaces.Length + 1);
+                                appServiceNameSpaces[appServiceNameSpaces.Length - 1] = line.Replace(namespaceIndicator + " ", "");
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    string[] error = { "Optional References not found" };
+                    displayText(error, ConsoleColor.Black, ConsoleColor.Red);
+                }
+
+            }
+
+            #endregion
         }
     }
 }

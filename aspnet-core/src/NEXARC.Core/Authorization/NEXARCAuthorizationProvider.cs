@@ -1,4 +1,4 @@
-﻿using Abp.Authorization;
+using Abp.Authorization;
 using Abp.Localization;
 using Abp.MultiTenancy;
 
@@ -42,6 +42,42 @@ namespace NEXARC.Authorization
             context.CreatePermission(PermissionNames.Pages_EmployeeWorkHistoryAuth, L("EmployeeWorkHistories"));
             context.CreatePermission(PermissionNames.Pages_EmploymentTypeAuth, L("EmploymentTypes"));
             context.CreatePermission(PermissionNames.Pages_GroupAuth, L("Groups"));
+
+			context.CreatePermission("AdminGroup",L("Admin Group"))
+				.CreateChildPermission("AdminGroup.Create",L("Admin Create Group"))
+				.CreateChildPermission("AdminGroup.Read",L("Admin Read Group"))
+				.CreateChildPermission("AdminGroup.Update",L("Admin Update Group"))
+				.CreateChildPermission("AdminGroup.Delete",L("Admin Delete Group"));
+
+			context.CreatePermission("HRISGroup",L("HRIS Group"))
+				.CreateChildPermission("HRISGroup.Create",L("HRIS Create Group"))
+				.CreateChildPermission("HRISGroup.Read",L("HRIS Read Group"))
+				.CreateChildPermission("HRISGroup.Update",L("HRIS Update Group"))
+				.CreateChildPermission("HRISGroup.Delete",L("HRIS Delete Group"));
+
+			context.CreatePermission("HRISGroup",L("HRIS Group"))
+				.CreateChildPermission("HRISGroup.Create",L("HRIS Create Group"))
+				.CreateChildPermission("HRISGroup.Read",L("HRIS Read Group"))
+				.CreateChildPermission("HRISGroup.Update",L("HRIS Update Group"))
+				.CreateChildPermission("HRISGroup.Delete",L("HRIS Delete Group"));
+
+			context.CreatePermission("HRISGroup",L("HRIS Group"))
+				.CreateChildPermission("HRISGroup.Create",L("HRIS Create Group"))
+				.CreateChildPermission("HRISGroup.Read",L("HRIS Read Group"))
+				.CreateChildPermission("HRISGroup.Update",L("HRIS Update Group"))
+				.CreateChildPermission("HRISGroup.Delete",L("HRIS Delete Group"));
+
+			context.CreatePermission("HRISGroup",L("HRIS Group"))
+				.CreateChildPermission("HRISGroup.Create",L("HRIS Create Group"))
+				.CreateChildPermission("HRISGroup.Read",L("HRIS Read Group"))
+				.CreateChildPermission("HRISGroup.Update",L("HRIS Update Group"))
+				.CreateChildPermission("HRISGroup.Delete",L("HRIS Delete Group"));
+
+			context.CreatePermission("AdminGroup",L("Admin Group"))
+				.CreateChildPermission("AdminGroup.Create",L("Admin Create Group"))
+				.CreateChildPermission("AdminGroup.Read",L("Admin Read Group"))
+				.CreateChildPermission("AdminGroup.Update",L("Admin Update Group"))
+				.CreateChildPermission("AdminGroup.Delete",L("Admin Delete Group"));
         }
 
         private static ILocalizableString L(string name)

@@ -27,7 +27,7 @@
     "abp-ng2-module": "^4.0.0",
     "abp-web-resources": "^3.8.2",
     "block-ui": "^2.70.1",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.27",
     "ngx-bootstrap": "^5.2.0",
